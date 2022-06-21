@@ -28,7 +28,7 @@ func main() {
 	storage := storage.NewStorage(db)
 	service := service.NewService(storage)
 	handler := handler.NewHandler(service)
-	router := handler.InitRouter()
+	router := api.InitRouter(handler)
 
 	server := api.Server{}
 
