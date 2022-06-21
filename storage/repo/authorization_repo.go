@@ -1,5 +1,5 @@
 package repo
 
-type SimpleBankRepository interface{
+type Authorization interface{
 	CreateAccount() (uint32, error)
 }
