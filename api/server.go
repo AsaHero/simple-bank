@@ -39,11 +39,13 @@ func InitRouter(h *handler.Handler) *gin.Engine {
 		auth.POST("/signup", h.SignUp)
 	}
 
-	transaction := router.Group("/")
-	{
-		transaction.POST("/make-transfers")
-		transaction.GET("/get-all-transactions")
-		transaction.GET("/get-transcation-by-id/:id")
+	transaction := router.Group("/v1")
+	{	
+		transaction.POST("/transfer", h.MakeTransfer)
+		transaction.GET("/all-transfers", h.GetAllTransfers)
+		transaction.GET("/transfer/:id", h.GetTransferById)
+		transaction.GET("/all-entries", h.GetAllEntries)
+		transaction.GET("/entry/:id", h.GetEntryById)
 	}
 
 	return router
