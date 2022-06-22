@@ -1,14 +1,9 @@
 package service
 
-import "github.com/AsaHero/simple-bank/storage"
-
-type Authorization interface {
-	
-}
-
-type Transaction interface {
-
-}
+import (
+	"github.com/AsaHero/simple-bank/api/models"
+	"github.com/AsaHero/simple-bank/storage"
+)
 
 type Service struct {
 	Authorization
@@ -21,5 +16,14 @@ func NewService(storage *storage.Storage) *Service {
 		Transaction: NewTransactionService(storage),
 	}
 }
+
+type Authorization interface {
+	CreateAccount(models.CreateAccountRequest) (uint32, error)
+}
+
+type Transaction interface {
+
+}
+
 
 

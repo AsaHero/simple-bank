@@ -1,7 +1,11 @@
 package postgres
 
 import (
+	"fmt"
+
 	"github.com/jmoiron/sqlx"
+
+	"github.com/AsaHero/simple-bank/api/models"
 )
 
 type AuthorizationPostgres struct {
@@ -14,6 +18,18 @@ func NewAuthorizationPostgres(db *sqlx.DB) *AuthorizationPostgres {
 	}
 }
 
-func (p AuthorizationPostgres) CreateAccount() (uint32, error) {
-	return 0, nil
+func (p AuthorizationPostgres) CreateAccount(req models.CreateAccountRequest) (uint32, error) {
+	var id uint32
+
+	query := fmt.Sprint(
+		`INSERT INTO account(
+			owner,
+			balance,
+			currency
+		) 
+		VALUES($1, $2, $3) RETURNING id`)
+
+	err := p.db.QueryRow(query, req.Owner, req.Balance, req.Currency).Scan(&id)
+
+	return id, err
 }
