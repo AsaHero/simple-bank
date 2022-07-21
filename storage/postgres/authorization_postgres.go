@@ -1,6 +1,9 @@
 package postgres
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/jmoiron/sqlx"
 
 	"github.com/AsaHero/simple-bank/api/models"
@@ -32,14 +35,44 @@ func (p AuthorizationPostgres) CreateAccount(req models.CreateAccountRequest) (u
 	return id, err
 }
 
-func (p AuthorizationPostgres) UpdateAccount(req models.CreateAccountRequest) error {
-	// db logic
+func (p AuthorizationPostgres) UpdateAccount(req models.UpdateAccountRequest, id uint32) error {
+
+	sets := make([]string, 0)
+	values := make([]interface{}, 0)
+	if req.Owner != nil {
+		sets = append(sets, "owner=$1")
+		values = append(values, req.Owner)
+
+	}
+
+	if req.Balance != nil {
+		sets = append(sets, "balance=$2")
+		values = append(values, req.Balance)
+	}
+
+	if req.Currency != nil {
+		sets = append(sets, "currency=$3")
+		values = append(values, req.Currency)
+	}
+
+	setValues := strings.Join(sets, ", ")
+
+	query := fmt.Sprintf(`UPDATE account SET %s WHERE id = %d`, setValues, id)
+	_, err := p.db.Exec(query, values...)
+	if err != nil {
+		return fmt.Errorf("error on updating account AuthorizationPostgres -> UpdateAccount: %s", err.Error())
+	}
+
 	return nil
 }
 
 func (p AuthorizationPostgres) GetAccount(id uint32) (entity.Account, error) {
-	// db logic
-	return entity.Account{}, nil
+	account := entity.Account{}
+	query := `SELECT * FROM account WHERE id=$1`
+	
+	err := p.db.Get(&account, query, id)
+	
+	return account, err
 }
 
 func (p AuthorizationPostgres) DeleteAccount(id uint32) error {

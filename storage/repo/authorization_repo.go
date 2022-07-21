@@ -7,7 +7,7 @@ import (
 
 type Authorization interface{
 	CreateAccount(models.CreateAccountRequest) (uint32, error)
-	UpdateAccount(models.CreateAccountRequest) error
+	UpdateAccount(models.UpdateAccountRequest, uint32) error
 	GetAccount(uint32) (entity.Account, error)
 	DeleteAccount(uint32) error
 }

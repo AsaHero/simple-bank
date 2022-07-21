@@ -20,8 +20,8 @@ func (s AuthorizationService) CreateAccount(req models.CreateAccountRequest) (ui
 	return s.storage.Authorization.CreateAccount(req)
 }
 
-func (s AuthorizationService) UpdateAccount(req models.CreateAccountRequest) error {
-	return s.storage.Authorization.UpdateAccount(req)
+func (s AuthorizationService) UpdateAccount(req models.UpdateAccountRequest, id uint32) error {
+	return s.storage.Authorization.UpdateAccount(req, id)
 }
 func (s AuthorizationService) GetAccount(id uint32) (entity.Account, error) {
 	return s.storage.Authorization.GetAccount(id)
