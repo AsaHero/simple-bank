@@ -5,12 +5,12 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"github.com/AsaHero/simple-bank/api/handler"
 	"github.com/AsaHero/simple-bank/api"
+	"github.com/AsaHero/simple-bank/api/handler"
 	"github.com/AsaHero/simple-bank/config"
+	"github.com/AsaHero/simple-bank/db/driver"
 	"github.com/AsaHero/simple-bank/service"
 	"github.com/AsaHero/simple-bank/storage"
-	"github.com/AsaHero/simple-bank/db/driver"
 )
 
 func main() {
@@ -19,7 +19,6 @@ func main() {
 		log.Fatalf("error on loading .env file: %s", err.Error())
 	}
 	config := config.Load()
-
 
 	db, err := driver.InitPostgresDB(&config)
 	if err != nil {

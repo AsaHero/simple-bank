@@ -21,7 +21,7 @@ func NewAuthorizationPostgres(db *sqlx.DB) *AuthorizationPostgres {
 }
 
 func (p AuthorizationPostgres) CreateAccount(req models.CreateAccountRequest) (uint32, error) {
-	var id uint32
+	var id uint32 = 0
 
 	query := `INSERT INTO account(
 			owner,
@@ -72,10 +72,12 @@ func (p AuthorizationPostgres) GetAccount(id uint32) (entity.Account, error) {
 	
 	err := p.db.Get(&account, query, id)
 	
-	return account, err
+	return account, fmt.Errorf("error on deleting account AuthorizationPostgres -> GetAccount: %s", err)
 }
 
 func (p AuthorizationPostgres) DeleteAccount(id uint32) error {
-	// db logic
-	return nil
+	query := `DELETE FROM account WHERE id = $1`
+	_, err := p.db.Exec(query, id)
+	
+	return fmt.Errorf("error on deleting account AuthorizationPostgres -> DeleteAccount: %s", err)
 }
